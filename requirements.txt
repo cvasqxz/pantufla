@@ -1,3 +1,4 @@
+altgraph==0.17
 importlib-metadata==1.4.0
 importlib-resources==1.0.2
 jaraco.classes==3.1.0
@@ -8,6 +9,7 @@ jaraco.stream==3.0.0
 jaraco.text==3.2.0
 keyboard==0.13.4
 more-itertools==8.1.0
+PyInstaller==3.6
 pyperclip==1.7.0
 pytz==2019.3
 six==1.14.0
